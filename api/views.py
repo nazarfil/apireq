@@ -1,8 +1,8 @@
 from django.conf import settings
 import requests
 ##Import models, serializers
-from contact.models import Request
-from contact.serializers import RequestSerializer
+from contact.models import ResearchRequest
+from contact.serializers import ResearchRequestSerializer
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -11,13 +11,19 @@ from rest_framework import status
 
 from contact.serializers import ContactSerializer
 
-class RequestList(generics.ListCreateAPIView):
-    queryset = Request.objects.all()
-    serializer_class = RequestSerializer
+class ResearchRequestList(generics.ListCreateAPIView):
+    queryset = ResearchRequest.objects.all()
+    serializer_class = ResearchRequestSerializer
+    def post(self, request, format=None):        
+        serializer = ResearchRequestSerializer(data=request.data)
+        if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class RequestDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Request.objects.all()
-    serializer_class = RequestSerializer
+class ResearchRequestDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ResearchRequest.objects.all()
+    serializer_class = ResearchRequestSerializer
 
 class ContactList(APIView):
     def post(self, request, format=None):

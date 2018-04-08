@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from contact.models import Contact
-
+from contact.models import ResearchRequest
 
 class ContactSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -22,8 +22,8 @@ class ContactSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class RequestSerializer(serializers.Serializer):
-    address =serializers.CharField()
+class ResearchRequestSerializer(serializers.Serializer):
+    address = serializers.CharField()
     name = serializers.CharField()
     category = serializers.CharField()
     start_date = serializers.DateField()
@@ -33,7 +33,7 @@ class RequestSerializer(serializers.Serializer):
         """
         Create and return a new `Snippet` instance, given the validated data.
         """
-        return Request.objects.create(**validated_data)
+        return ResearchRequest.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         """
