@@ -21,6 +21,18 @@ class ResearchRequestList(generics.ListCreateAPIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CategoryRequestList(generics.ListCreateAPIView):
+    #queryset = ResearchRequest.objects.all()
+    serializer_class = ResearchRequestSerializer
+
+    def get_queryset(self):
+            """
+            This view should return a list of all the purchases for
+            the user as determined by the username portion of the URL.
+            """
+            cat = self.kwargs['category']
+            return ResearchRequest.objects.filter(category=cat)
+
 class ResearchRequestDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ResearchRequest.objects.all()
     serializer_class = ResearchRequestSerializer
