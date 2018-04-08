@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from contact.models import Contact
 from contact.models import ResearchRequest
+from contact.models import UserData
 
 class ContactSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -20,6 +21,20 @@ class ContactSerializer(serializers.Serializer):
         instance.email = validated_data.get('email', instance.email)
         instance.message = validated_data.get('message', instance.message)
         instance.save()
+        return instance
+
+class UserDataSerializer(serializers.Serializer):
+    hash = serializers.CharField()
+    age = serializers.IntegerField()
+    illnesss = serializers.CharField()
+
+    def create(self, validated_data):
+        return UserData.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.hash = validated_data.get('hash', instance.hash)
+        age = validated_data.get('age', instance.age)
+        illnesss = validated_data.get('ilness', instance.illnesss)
         return instance
 
 class ResearchRequestSerializer(serializers.Serializer):

@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^contact/$', views.ContactList.as_view()),
     url(r'^request/(?P<category>.+)/$', views.CategoryRequestList.as_view()),
     url(r'^request/$', views.ResearchRequestList.as_view()),
+    url(r'^userdata/$', views.UserDataList.as_view()),
     
 ]
 

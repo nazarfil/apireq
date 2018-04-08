@@ -2,7 +2,7 @@ from django.conf import settings
 import requests
 ##Import models, serializers
 from contact.models import ResearchRequest
-from contact.serializers import ResearchRequestSerializer
+from contact.serializers import ResearchRequestSerializer, UserDataSerializer
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -32,6 +32,14 @@ class CategoryRequestList(generics.ListCreateAPIView):
             """
             cat = self.kwargs['category']
             return ResearchRequest.objects.filter(category=cat)
+
+class UserDataList(APIView):
+    def post(self, request, format=None):
+        serializer = UserDataSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return  Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ResearchRequestDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ResearchRequest.objects.all()
