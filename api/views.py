@@ -1,7 +1,7 @@
 from django.conf import settings
 import requests
 ##Import models, serializers
-from contact.models import ResearchRequest
+from contact.models import ResearchRequest, UserData
 from contact.serializers import ResearchRequestSerializer, UserDataSerializer
 
 from rest_framework import generics
@@ -33,13 +33,27 @@ class CategoryRequestList(generics.ListCreateAPIView):
             cat = self.kwargs['category']
             return ResearchRequest.objects.filter(category=cat)
 
-class UserDataList(APIView):
+
+class UserDataPost(APIView):
     def post(self, request, format=None):
         serializer = UserDataSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return  Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserDataList(generics.ListCreateAPIView):
+    serializer_class = UserDataSerializer
+    
+    def get_queryset(self):
+        code = "good-security"
+        ref = self.kwargs['blockref']
+        if ref == code :
+            return UserData.objects.all()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class ResearchRequestDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ResearchRequest.objects.all()
